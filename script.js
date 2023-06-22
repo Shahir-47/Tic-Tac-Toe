@@ -71,7 +71,6 @@ const Gameboard = (() => {
         if (boardArray[Math.floor(square/3)][square%3] === '') {
             boardArray[Math.floor(square/3)][square%3] = player.mark;
             updateBoard();
-            console.log("line 74:" + gameController.gameOver)
             return checkEnd();
         }
         return false;
@@ -112,7 +111,6 @@ const gameController = (() => {
     const squares = document.querySelectorAll('.square');
     squares.forEach((square) => {
       square.addEventListener('click', (e) => {
-        console.log("line 117: " + state);
         if (!gameOver) {
           result = Gameboard.playRound(currentPlayer, e.target.id.slice(-1));
           if (result) {
@@ -123,11 +121,8 @@ const gameController = (() => {
           } else {
             currentPlayer = player1;
           }
-          console.log("game over: " + gameOver);
         }
       });
     });
-  
-    return { result, currentPlayer };
 })();
   

@@ -17,6 +17,7 @@
     font-weight: 900;
     color: #000000;
     text-align: center;
+    margin-bottom: 0;
 }
 body {
     margin: 0;
@@ -27,11 +28,77 @@ body {
 }
 
 .board-container {
+    display: none;
     width: 100%;
     max-width: 500px;
     height: 80%;
     max-height: 500px;
 }
+
+.load-up {
+    /* display: none; */
+    display: grid;
+    grid-template-rows: 3fr 1fr;
+    grid-auto-columns: 100%;
+    align-items: stretch;
+    gap: 1rem;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #000000;
+    margin-bottom: 1rem;
+}
+
+.load-up .button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.load-up .button-container .start {
+    max-height: 30%;
+    max-width: 20%;
+}
+
+.player-choices {
+    display: grid;
+    grid-template-columns: repeat(2, min-content);
+    justify-content: space-evenly;
+    align-content: space-evenly;
+}
+
+.player-choices .player-1{
+    border-radius: 15px;
+    border: 1px solid #000000;
+    display: grid;
+    grid-template-rows: min-content min-content repeat(2, min-content);
+    align-items: center;
+    justify-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    width: 100%;
+    height: 100%;
+    padding-bottom: 0px;
+}
+
+.player-choices .player-1 h2{
+    margin-bottom: 0px;
+}
+
+.marker p{
+    margin-bottom: 8px;
+}
+
+.color p {
+    margin-top: 0px
+}
+
+.player-choices .player-1 .player-1-choice-x {
+    font-size: 4rem;
+}
+
+/* .player-choices .player-1 div~input {
+    padding: 0.5rem 0rem;
+} */
 
 .result {
     font-size: 1.5rem;

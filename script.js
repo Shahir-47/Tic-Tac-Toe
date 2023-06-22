@@ -30,46 +30,42 @@ const Gameboard = (() => {
             }
         })
     }
+
+    const designSquare = (square) => {
+        square.style.backgroundColor = '#dddcdcbc';
+        square.style.border = '2px dashed red';
+        square.style.fontWeight = 'bold';
+        square.style.fontSize = '5rem';
+    }
         
     const showWin = () => {
         let square;
         if (checkWin().row !== undefined) {
             for (let i = 0; i < 3; i++) {
                 square = document.getElementById(`square${checkWin().row * 3 + i}`);
-                square.classList.add('win');
-                square.style.border = '2px dashed red';
-                square.style.fontWeight = 'bold';
-                square.style.fontSize = '5rem';
+                designSquare(square);
             }
         } else if (checkWin().column !== undefined) {
             for (let i = 0; i < 3; i++) {
                 square = document.getElementById(`square${i * 3 + checkWin().column}`);
-                square.classList.add('win');
-                square.style.border = '2px dashed red';
-                square.style.fontWeight = 'bold';
-                square.style.fontSize = '5rem';
+                designSquare(square);
             }
         } else if (checkWin().diagonal !== undefined) {
             if (checkWin().diagonal === 0) {
                 for (let i = 0; i < 3; i++) {
                     square = document.getElementById(`square${i * 3 + i}`);
-                    square.classList.add('win');
-                    square.style.border = '2px dashed red';
-                    square.style.fontWeight = 'bold';
-                    square.style.fontSize = '5rem';
+                    designSquare(square);
                 }
             } else {
                 for (let i = 0; i < 3; i++) {
                     square = document.getElementById(`square${i * 3 + 2 - i}`);
-                    square.classList.add('win');
-                    square.style.border = '2px dashed red';
-                    square.style.fontWeight = 'bold';
-                    square.style.fontSize = '5rem';
+                    designSquare(square);
                 }
             }
         }
 
     }
+
     
 
     const checkWin = () => {

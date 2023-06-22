@@ -41,6 +41,11 @@ body {
     height: 27.6px;
 }
 
+.win{
+    color: #3E75C3;
+    background-color: #dddcdcbc;
+}
+
 .board{
     display: grid;
     grid-template-columns: repeat(3, calc(100% / 3));

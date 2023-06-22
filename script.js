@@ -84,24 +84,22 @@ const player = (name, mark) => {
     return {name, mark}
 }
 
-// const displayController = (() => {
-//     console.log('displayController');
-//     Gameboard.displayBoard();
-//     const squares = document.querySelectorAll('.square');
-//     squares.forEach((square) => {
-//         square.addEventListener('click', (e) => {
-//             if (!gameController.gameOver) {
-//                 gameController.playRound(e.target.id.slice(-1));
-//                 console.log("game over: " + gameController.gameOver);
-                
-//             }
-//         })
-//     })
+const displayController = (() => {
+    Gameboard.displayBoard();
 
-// })();
+    const displayWinner = (winner, result) => {
+        const winnerDisplay = document.querySelector('.result');
+        if (result === 'tie') {
+            winnerDisplay.textContent = 'It\'s a tie!';
+        } else {
+            winnerDisplay.textContent = `${winner.name} wins!`;
+        }
+    }
+    return {displayWinner}
+})();
+
 
 const gameController = (() => {
-    Gameboard.displayBoard();
     const player1 = player('Player 1', 'X');
     const player2 = player('Player 2', 'O');
     let currentPlayer = player1;
@@ -115,6 +113,7 @@ const gameController = (() => {
           result = Gameboard.playRound(currentPlayer, e.target.id.slice(-1));
           if (result) {
             gameOver = true;
+            displayController.displayWinner(currentPlayer, result);
           }
           if (currentPlayer === player1) {
             currentPlayer = player2;
@@ -124,5 +123,6 @@ const gameController = (() => {
         }
       });
     });
+    return {result}
 })();
   

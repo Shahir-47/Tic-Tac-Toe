@@ -112,9 +112,8 @@ const gameController = (() => {
     const squares = document.querySelectorAll('.square');
     squares.forEach((square) => {
       square.addEventListener('click', (e) => {
-        let state = !gameOver;
         console.log("line 117: " + state);
-        if (state) {
+        if (!gameOver) {
           result = Gameboard.playRound(currentPlayer, e.target.id.slice(-1));
           if (result) {
             gameOver = true;

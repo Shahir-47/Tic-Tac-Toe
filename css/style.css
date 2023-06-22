@@ -36,9 +36,9 @@ body {
 .result {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #000000;
     text-align: center;
     height: 27.6px;
+    transition: all 0.2s ease-in-out;
 }
 
 .win{

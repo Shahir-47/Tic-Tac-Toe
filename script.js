@@ -37,7 +37,7 @@ const Gameboard = (() => {
             for (let i = 0; i < 3; i++) {
                 square = document.getElementById(`square${checkWin().row * 3 + i}`);
                 square.classList.add('win');
-                square.style.color = 'white';
+                square.style.border = '2px dashed red';
                 square.style.fontWeight = 'bold';
                 square.style.fontSize = '5rem';
             }
@@ -45,7 +45,7 @@ const Gameboard = (() => {
             for (let i = 0; i < 3; i++) {
                 square = document.getElementById(`square${i * 3 + checkWin().column}`);
                 square.classList.add('win');
-                square.style.color = 'white';
+                square.style.border = '2px dashed red';
                 square.style.fontWeight = 'bold';
                 square.style.fontSize = '5rem';
             }
@@ -54,7 +54,7 @@ const Gameboard = (() => {
                 for (let i = 0; i < 3; i++) {
                     square = document.getElementById(`square${i * 3 + i}`);
                     square.classList.add('win');
-                    square.style.color = 'white';
+                    square.style.border = '2px dashed red';
                     square.style.fontWeight = 'bold';
                     square.style.fontSize = '5rem';
                 }
@@ -62,7 +62,7 @@ const Gameboard = (() => {
                 for (let i = 0; i < 3; i++) {
                     square = document.getElementById(`square${i * 3 + 2 - i}`);
                     square.classList.add('win');
-                    square.style.color = 'white';
+                    square.style.border = '2px dashed red';
                     square.style.fontWeight = 'bold';
                     square.style.fontSize = '5rem';
                 }
@@ -139,6 +139,8 @@ const displayController = (() => {
         if (result === 'tie') {
             winnerDisplay.textContent = 'It\'s a tie!';
         } else {
+            winnerDisplay.style.color = winner.color;
+
             winnerDisplay.textContent = `${winner.name} wins!`;
             Gameboard.showWin();
         }

@@ -18,10 +18,16 @@ const Gameboard = (() => {
         }
     }
 
-    const updateBoard = () => {
+    const updateBoard = (player1, player2) => {
         const squares = document.querySelectorAll('.square');
         squares.forEach((square, i) => {            
             square.textContent = boardArray[Math.floor(i/3)][i%3];
+            if (square.textContent === player1.mark) {
+                square.style.color = player1.color;
+            }
+            if (square.textContent === player2.mark) {
+                square.style.color = player2.color;
+            }
         })
     }
         
@@ -31,27 +37,40 @@ const Gameboard = (() => {
             for (let i = 0; i < 3; i++) {
                 square = document.getElementById(`square${checkWin().row * 3 + i}`);
                 square.classList.add('win');
+                square.style.color = 'white';
+                square.style.fontWeight = 'bold';
+                square.style.fontSize = '5rem';
             }
         } else if (checkWin().column !== undefined) {
             for (let i = 0; i < 3; i++) {
                 square = document.getElementById(`square${i * 3 + checkWin().column}`);
                 square.classList.add('win');
+                square.style.color = 'white';
+                square.style.fontWeight = 'bold';
+                square.style.fontSize = '5rem';
             }
         } else if (checkWin().diagonal !== undefined) {
             if (checkWin().diagonal === 0) {
                 for (let i = 0; i < 3; i++) {
                     square = document.getElementById(`square${i * 3 + i}`);
                     square.classList.add('win');
+                    square.style.color = 'white';
+                    square.style.fontWeight = 'bold';
+                    square.style.fontSize = '5rem';
                 }
             } else {
                 for (let i = 0; i < 3; i++) {
                     square = document.getElementById(`square${i * 3 + 2 - i}`);
                     square.classList.add('win');
+                    square.style.color = 'white';
+                    square.style.fontWeight = 'bold';
+                    square.style.fontSize = '5rem';
                 }
             }
         }
 
     }
+    
 
     const checkWin = () => {
         // check rows
@@ -98,7 +117,7 @@ const Gameboard = (() => {
     const playRound = (player, square) => {
         if (boardArray[Math.floor(square/3)][square%3] === '') {
             boardArray[Math.floor(square/3)][square%3] = player.mark;
-            updateBoard();
+            updateBoard(gameController.player1, gameController.player2);
             return checkEnd();
         }
         return false;
@@ -108,8 +127,8 @@ const Gameboard = (() => {
 
 })();
 
-const player = (name, mark) => {
-    return {name, mark}
+const player = (name, mark, color) => {
+    return {name, mark, color}
 }
 
 const displayController = (() => {
@@ -129,8 +148,8 @@ const displayController = (() => {
 
 
 const gameController = (() => {
-    const player1 = player('Player 1', 'X');
-    const player2 = player('Player 2', 'O');
+    const player1 = player('Player 1', 'X', 'blue');
+    const player2 = player('Player 2', 'O', 'red');
     let currentPlayer = player1;
     let result = null;
     let gameOver = false;
@@ -152,6 +171,6 @@ const gameController = (() => {
         }
       });
     });
-    return {result}
+    return {result, player1, player2}
 })();
   

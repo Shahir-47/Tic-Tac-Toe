@@ -5,7 +5,7 @@
 .container {
     flex: 1;
     display: grid;
-    grid-template-rows: repeat(3, min-content) 1fr min-content;
+    grid-template-rows: repeat(2, min-content) 1fr min-content;
     align-items: center;
     justify-items: center;
     background-color: #dddcdcbc;
@@ -19,7 +19,6 @@
     color: #000000;
     text-align: center;
     margin-bottom: 0;
-    margin-top: 1rem;
 }
 body {
     margin: 0;
@@ -92,8 +91,7 @@ body {
     align-content: space-evenly;
 }
 
-.player-choices .player-2,
-.player-choices .player-1{
+.player {
     border-radius: 15px;
     border: 1px solid #000000;
     display: grid;
@@ -160,17 +158,18 @@ body {
 }
 
 .reset-container {
+    display: none;
     width: 100%;
     height: 30px;
     margin: 1rem 0px;
-    display: flex;
+    /* display: flex; */
     align-items: center;
     justify-content: center;
     gap: 1rem;
+    transition: background-color 0.3s ease;
 }
 
 .reset{
-    display: inline-block;
     padding: 10px 20px;
     border: 1px solid #000000;
     font-size: 16px;

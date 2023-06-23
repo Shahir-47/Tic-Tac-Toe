@@ -1,8 +1,8 @@
 const Gameboard = (() => {
     let boardArray = [['','',''], ['', '', ''], ['','','']]
-    const getBoard = () => board;
-    const setBoard = (newBoard) => board = newBoard;
-    const resetBoard = () => board = [['','',''], ['','',''], ['','','']];
+    const getBoard = () => boardArray;
+    const setBoard = (newBoard) => boardArray = newBoard;
+    const resetBoard = () => boardArray = [['','',''], ['','',''], ['','','']];
     
     const displayBoard = () => {
         const boardContainer = document.querySelector('.board-container');
@@ -13,7 +13,7 @@ const Gameboard = (() => {
             const square = document.createElement('div');
             square.classList.add('square');
             square.setAttribute('id', `square${i}`);
-            square.textContent = boardArray[Math.floor(i/3)][i%3];
+            square.textContent = Gameboard.getBoard()[Math.floor(i/3)][i%3];
             board.appendChild(square);
         }
     }
@@ -21,7 +21,7 @@ const Gameboard = (() => {
     const updateBoard = (player1, player2) => {
         const squares = document.querySelectorAll('.square');
         squares.forEach((square, i) => {            
-            square.textContent = boardArray[Math.floor(i/3)][i%3];
+            square.textContent = Gameboard.getBoard()[Math.floor(i/3)][i%3];
             if (square.textContent === player1.mark) {
                 square.style.color = player1.color;
             }
@@ -119,7 +119,7 @@ const Gameboard = (() => {
         return false;
     }
 
-    return {displayBoard, playRound, showWin}
+    return {displayBoard, playRound, showWin, resetBoard, updateBoard, getBoard}
 
 })();
 
@@ -262,6 +262,28 @@ const gameController = (() => {
           if (result) {
             gameOver = true;
             displayController.displayWinner(currentPlayer, result);
+
+            //make reset button appear
+            const container = document.querySelector('.container');
+            container.style.gridTemplateRows = 'repeat(3, min-content) 1fr min-content';
+            const reset = document.querySelector('.reset-container');
+            reset.style.display = 'flex';
+            reset.onclick = () => {
+                Gameboard.resetBoard();
+                console.log(Gameboard.getBoard());
+                Gameboard.updateBoard(player1, player2);
+
+                const winnerDisplay = document.querySelector('.result');
+                winnerDisplay.textContent = '';
+                winnerDisplay.style.color = 'black';
+
+                const container = document.querySelector('.container');
+                container.style.gridTemplateRows = 'repeat(2, min-content) 1fr min-content';
+                const reset = document.querySelector('.reset-container');
+                reset.style.display = 'none';
+
+                gameOver = false;
+            }
           }
           if (currentPlayer === player1) {
             currentPlayer = player2;

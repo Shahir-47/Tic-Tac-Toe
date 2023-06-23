@@ -28,7 +28,6 @@ body {
 }
 
 .board-container {
-    display: none;
     width: 100%;
     max-width: 500px;
     height: 80%;
@@ -44,7 +43,6 @@ body {
     gap: 1rem;
     width: 100%;
     height: 100%;
-    border: 1px solid #000000;
     margin-bottom: 1rem;
 }
 
@@ -54,9 +52,24 @@ body {
     justify-content: center;
 }
 
-.load-up .button-container .start {
+/* .load-up .button-container .start {
     max-height: 30%;
     max-width: 20%;
+} */
+
+.start {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 1px solid #000000;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: 700;
+}
+  
+.start:hover {
+    background-color: #dddcdcbc;
 }
 
 .player-choices {
@@ -66,6 +79,7 @@ body {
     align-content: space-evenly;
 }
 
+.player-choices .player-2,
 .player-choices .player-1{
     border-radius: 15px;
     border: 1px solid #000000;
@@ -78,22 +92,45 @@ body {
     width: 100%;
     height: 100%;
     padding-bottom: 0px;
+    font-weight: 500;
 }
 
+.player-choices .player-2 h2,
 .player-choices .player-1 h2{
     margin-bottom: 0px;
 }
 
+.marker {
+    display: grid;
+}
+
 .marker p{
     margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 1.4rem;
+}
+
+.color {
+    display: flex;
+    gap: 1rem;
 }
 
 .color p {
     margin-top: 0px
 }
 
-.player-choices .player-1 .player-1-choice-x {
+.player-selection {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: center;
+}
+.player-chooser {
     font-size: 4rem;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    width: 100%;
+    height: 100%;
 }
 
 /* .player-choices .player-1 div~input {

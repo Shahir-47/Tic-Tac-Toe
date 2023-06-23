@@ -164,6 +164,7 @@ const displayController = (() => {
         });
         player_one_marker_o.addEventListener('click', () => {
             player1_mark = 'O';
+            console.log(player1_mark)
             updateMarkerStyle(player_one_marker_o, player_one_color.value);
             uncheck(player_one_marker_x);
 
@@ -224,27 +225,31 @@ const gameController = (() => {
     //Default players
     const player1 = player('Player 1', 'X', '#eb3434');
     const player2 = player('Player 2', 'O', '#55eb34');
-
+    
+    //Start game
     const startBtn = document.querySelector('.start');
     startBtn.onclick = () => {
+
+        //make the board appear
         const boardContainer = document.querySelector('.board-container');
         boardContainer.style.display = 'block';
+
+        //hide the start screen
         const startScreen = document.querySelector('.load-up');
         startScreen.style.display = 'none';
-        
-        if (document.querySelector('.player-1-name').value !== '') {
-            player1.name = document.querySelector('.player-1-name').value;
-        }
-        if (document.querySelector('.player-2-name').value !== '') {
-            player2.name = document.querySelector('.player-2-name').value;
-        }
+
+        //update player names, markers and colors
+        player1.name = document.querySelector('.player-1-name').value !== '' ? document.querySelector('.player-1-name').value : player1.name;
+        player2.name = document.querySelector('.player-2-name').value !== '' ? document.querySelector('.player-2-name').value : player2.name;
         player1.color = document.querySelector('.player-1-color').value;
         player2.color = document.querySelector('.player-2-color').value;
-        player1.mark = displayController.player1_mark;
-        player2.mark = displayController.player2_mark;
+        player1.mark = document.querySelector('.player-1-choice-x').style.backgroundColor !== '' ? 'X' : 'O';
+        player2.mark = document.querySelector('.player-2-choice-x').style.backgroundColor !== '' ? 'X' : 'O';
+
+
     }
 
-
+    //game Flow
     let currentPlayer = player1;
     let result = null;
     let gameOver = false;
@@ -266,6 +271,6 @@ const gameController = (() => {
         }
       });
     });
-    return {result, player1, player2}
+    return {player1, player2}
 })();
   

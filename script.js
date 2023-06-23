@@ -154,8 +154,8 @@ const Gameboard = (() => {
 
 })();
 
-const player = (name, mark, color) => {
-    return {name, mark, color}
+const player = (name, mark, color, type) => {
+    return {name, mark, color, type}
 }
 
 const displayController = (() => {
@@ -196,7 +196,6 @@ const displayController = (() => {
         });
         player_one_marker_o.addEventListener('click', () => {
             player1_mark = 'O';
-            console.log(player1_mark)
             updateMarkerStyle(player_one_marker_o, player_one_color.value);
             uncheck(player_one_marker_x);
 
@@ -260,8 +259,8 @@ const gameController = (() => {
     Gameboard.displayBoard();
 
     //Default players
-    const player1 = player('Player 1', 'X', '#eb3434');
-    const player2 = player('Player 2', 'O', '#55eb34');
+    const player1 = player('Player 1', 'X', '#eb3434', 'human');
+    const player2 = player('Player 2', 'O', '#55eb34', 'ai');
     
     //Start game
     const startBtn = document.querySelector('.start');
@@ -282,63 +281,102 @@ const gameController = (() => {
         player2.color = document.querySelector('.player-2-color').value;
         player1.mark = document.querySelector('.player-1-choice-x').style.backgroundColor !== '' ? 'X' : 'O';
         player2.mark = document.querySelector('.player-2-choice-x').style.backgroundColor !== '' ? 'X' : 'O';
+        player1.type = 'human';
+        player2.type = 'ai';
+
+        humanMove();
+
     }
 
     //game Flow
     let currentPlayer = player1;
     let result = null;
     let gameOver = false;
-    
-    // Event Listener for each square
-    const squares = document.querySelectorAll('.square');
-    squares.forEach((square) => {
-      square.addEventListener('click', (e) => {
-        // Play round if game not over
-        if (!gameOver) {
-          result = Gameboard.playRound(currentPlayer, e.target.id.slice(-1));
-          // If result is true, game is over
-          if (result) {
-            gameOver = true;
-            displayController.displayWinner(currentPlayer, result);
 
-            //make reset button appear
-            const container = document.querySelector('.container');
-            container.style.gridTemplateRows = 'repeat(3, min-content) 1fr min-content';
-            const reset = document.querySelector('.reset-container');
-            reset.style.display = 'flex';
-
-            //Reset Game
-            reset.onclick = () => {
-                // reset the board
-                Gameboard.resetBoard();
-                console.log(Gameboard.getBoard());
-                Gameboard.updateBoard(player1, player2);
-                Gameboard.removeWin();
-
-                // reset the result display
-                const winnerDisplay = document.querySelector('.result');
-                winnerDisplay.textContent = '';
-                winnerDisplay.style.color = 'black';
-
-                // make reset button disappear
-                const container = document.querySelector('.container');
-                container.style.gridTemplateRows = 'repeat(2, min-content) 1fr min-content';
-                const reset = document.querySelector('.reset-container');
-                reset.style.display = 'none';
-                
-                // Reset the game
-                gameOver = false;
-            }
-          }
-          // Else, switch players
-          if (currentPlayer === player1) {
-            currentPlayer = player2;
-          } else {
-            currentPlayer = player1;
-          }
+    const switchTurns = () => {
+        // Switch players
+        if (currentPlayer === player1) {
+          currentPlayer = player2;
+        } else {
+          currentPlayer = player1;
         }
-      });
-    });
+        
+        if (!gameOver) {
+            if (currentPlayer.type === 'ai') {
+              aiMove();
+            } else if (currentPlayer.type === 'human') {
+              humanMove();
+            }
+        }
+    };
+
+    const aiMove = () => {
+        const squares = document.querySelectorAll('.square');
+        let square;
+        do {
+          square = Math.floor(Math.random() * 9);
+        } while (squares[square].textContent !== '');
+        result = Gameboard.playRound(currentPlayer, square);
+        if (result) {
+          gameOver = true;
+          displayController.displayWinner(currentPlayer, result);
+          handleGameEnd();
+        } else {
+          switchTurns();
+        }
+    };
+
+    const humanMove = () => {
+        const squares = document.querySelectorAll('.square');
+        squares.forEach((square) => {
+          square.onclick = (e) => {
+            // Play round if game not over
+            if (!gameOver) {
+              result = Gameboard.playRound(currentPlayer, e.target.id.slice(-1));
+              if (result) {
+                gameOver = true;
+                displayController.displayWinner(currentPlayer, result);
+                handleGameEnd();
+              } else {
+                switchTurns();
+              }
+            }
+          };
+        });
+    };
+
+    const handleGameEnd = () => {
+        // Make reset button appear
+        const container = document.querySelector('.container');
+        container.style.gridTemplateRows = 'repeat(3, min-content) 1fr min-content';
+        const reset = document.querySelector('.reset-container');
+        reset.style.display = 'flex';
+    
+        // Reset Game
+        reset.onclick = () => {
+          // Reset the board
+          Gameboard.resetBoard();
+          Gameboard.updateBoard(player1, player2);
+          Gameboard.removeWin();
+    
+          // Reset the result display
+          const winnerDisplay = document.querySelector('.result');
+          winnerDisplay.textContent = '';
+          winnerDisplay.style.color = 'black';
+    
+          // Make reset button disappear
+          const container = document.querySelector('.container');
+          container.style.gridTemplateRows = 'repeat(2, min-content) 1fr min-content';
+          const reset = document.querySelector('.reset-container');
+          reset.style.display = 'none';
+    
+          // Reset the game
+          gameOver = false;
+    
+          // Start the game by allowing the first player to make a move
+          humanMove();
+        };
+      };
     return {player1, player2}
 })();
   

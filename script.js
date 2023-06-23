@@ -150,7 +150,7 @@ const displayController = (() => {
         updateMarkerStyle(player_two_marker_o, player_two_color.value);
     }
 
-    const player_one_event = () => {
+    const player_event = (player_one_marker_x, player_one_color, player_one_marker_o, player_two_marker_o, player_two_color, player_two_marker_x  ) => {
         player_one_marker_x.addEventListener('click', () => {
             gameController.player1.mark = 'X';
             updateMarkerStyle(player_one_marker_x, player_one_color.value);
@@ -175,33 +175,7 @@ const displayController = (() => {
             }
         });
     }
-
-    const player_two_event = () => {
-        player_two_marker_x.addEventListener('click', () => {
-            gameController.player2.mark = 'X';
-            updateMarkerStyle(player_two_marker_x, player_two_color.value);
-            uncheck(player_two_marker_o);
-
-            updateMarkerStyle(player_one_marker_o, player_one_color.value);
-            uncheck(player_one_marker_x);
-        });
-        player_two_marker_o.addEventListener('click', () => {
-            gameController.player2.mark = 'O';
-            updateMarkerStyle(player_two_marker_o, player_two_color.value);
-            uncheck(player_two_marker_x);
-
-            updateMarkerStyle(player_one_marker_x, player_one_color.value);
-            uncheck(player_one_marker_o);
-        });
-        player_two_color.addEventListener('input', () => {
-            if (player_two_marker_o.style.backgroundColor !== 'transparent'){
-                updateMarkerStyle(player_two_marker_o, player_two_color.value);
-            } else{
-                updateMarkerStyle(player_two_marker_x, player_two_color.value);
-            }
-        });
-    }        
-
+      
     const updateMarkerStyle = (marker, color) => {
         marker.style.color = color;
         marker.style.backgroundColor = '#dddcdcbc';
@@ -219,8 +193,8 @@ const displayController = (() => {
         player_one_default();
         player_two_default();
 
-        player_one_event();
-        player_two_event();
+        player_event(player_one_marker_x, player_one_color, player_one_marker_o, player_two_marker_o, player_two_color, player_two_marker_x);
+        player_event(player_two_marker_x, player_two_color, player_two_marker_o, player_one_marker_o, player_one_color, player_one_marker_x);
     }
 
     const displayWinner = (winner, result) => {

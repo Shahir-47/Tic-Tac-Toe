@@ -156,6 +156,7 @@ const displayController = (() => {
             updateMarkerStyle(player_one_marker_x, player_one_color.value);
             uncheck(player_one_marker_o);
 
+            gameController.player2.mark = 'O';
             updateMarkerStyle(player_two_marker_o, player_two_color.value);
             uncheck(player_two_marker_x);
         });
@@ -164,11 +165,12 @@ const displayController = (() => {
             updateMarkerStyle(player_one_marker_o, player_one_color.value);
             uncheck(player_one_marker_x);
 
+            gameController.player2.mark = 'X';
             updateMarkerStyle(player_two_marker_x, player_two_color.value);
             uncheck(player_two_marker_o);
         });
         player_one_color.addEventListener('input', () => {
-            if (player_one_marker_o.style.backgroundColor !== 'transparent'){
+            if (player_one_marker_o.style.backgroundColor !== ''){
                 updateMarkerStyle(player_one_marker_o, player_one_color.value);
             } else{
                 updateMarkerStyle(player_one_marker_x, player_one_color.value);
@@ -183,7 +185,7 @@ const displayController = (() => {
     }
 
     const uncheck = (marker) => {
-        marker.style.backgroundColor = 'transparent';
+        marker.style.backgroundColor = '';
         marker.style.border = 'none';
         marker.style.color = 'black';
     }
@@ -195,6 +197,16 @@ const displayController = (() => {
 
         player_event(player_one_marker_x, player_one_color, player_one_marker_o, player_two_marker_o, player_two_color, player_two_marker_x);
         player_event(player_two_marker_x, player_two_color, player_two_marker_o, player_one_marker_o, player_one_color, player_one_marker_x);
+
+        // const startButton = document.querySelector('.start');
+        // startButton.addEventListener('click', () => {
+        //     Gameboard.displayBoard();
+        //     document.querySelector('.load-up').style.display = 'none';
+        //     gameController.player1.name = document.querySelector('.player-1-name').value;
+        //     gameController.player2.name = document.querySelector('.player-2-name').value;
+        //     gameController.player1.color = player_one_color.value;
+        //     gameController.player2.color = player_two_color.value;
+        // });
     }
 
     const displayWinner = (winner, result) => {
@@ -213,9 +225,9 @@ const displayController = (() => {
 
 
 const gameController = (() => {
+    const player1 = player('Player 1', 'X', '#eb3434');
+    const player2 = player('Player 2', 'O', '#55eb34');
     displayController.input();
-    const player1 = player('Player 1', 'X', 'blue');
-    const player2 = player('Player 2', 'O', 'red');
     let currentPlayer = player1;
     let result = null;
     let gameOver = false;

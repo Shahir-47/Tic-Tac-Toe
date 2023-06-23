@@ -4,6 +4,7 @@ const Gameboard = (() => {
     const setBoard = (newBoard) => boardArray = newBoard;
     const resetBoard = () => boardArray = [['','',''], ['','',''], ['','','']];
     
+    // Display the board
     const displayBoard = () => {
         const boardContainer = document.querySelector('.board-container');
         const board = document.createElement('div');
@@ -18,6 +19,7 @@ const Gameboard = (() => {
         }
     }
 
+    // Update the board
     const updateBoard = (player1, player2) => {
         const squares = document.querySelectorAll('.square');
         squares.forEach((square, i) => {            
@@ -31,13 +33,15 @@ const Gameboard = (() => {
         })
     }
 
+    // Design the winning squares
     const designSquare = (square) => {
         square.style.backgroundColor = '#dddcdcbc';
         square.style.border = '2px dashed red';
         square.style.fontWeight = 'bold';
         square.style.fontSize = '5rem';
     }
-        
+
+    // Show the winning design
     const showWin = () => {
         let square;
         if (checkWin().row !== undefined) {
@@ -66,8 +70,33 @@ const Gameboard = (() => {
 
     }
 
-    
+    // Remove the winning design
+    const removeWin = () => {
+        const squares = document.querySelectorAll('.square');
+        squares.forEach((square) => {
+            square.style.cssText = `
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.2s ease-in-out;
+                border-bottom: 3px dashed #000000;
+                border-right: 3px dashed #000000;
+                `;
+            })
+        const rowBorder = document.querySelectorAll('.square:nth-child(3n)');
+        rowBorder.forEach((border) => {
+            border.style.borderRight = 'none';
+        });
 
+        const columnBorder = document.querySelectorAll('.square:nth-child(n+7)');
+        columnBorder.forEach((border) => {
+            border.style.borderBottom = 'none';
+        });
+    }
+    
     const checkWin = () => {
         // check rows
         for (let i = 0; i < 3; i++) {
@@ -99,7 +128,8 @@ const Gameboard = (() => {
         }
         return true;
     }
-
+    
+    // Check if game is over
     const checkEnd = () => {
         if (checkWin().marker) {
             return checkWin().marker;
@@ -109,7 +139,8 @@ const Gameboard = (() => {
         }
         return false;
     }
-
+    
+    // Play round
     const playRound = (player, square) => {
         if (boardArray[Math.floor(square/3)][square%3] === '') {
             boardArray[Math.floor(square/3)][square%3] = player.mark;
@@ -119,7 +150,7 @@ const Gameboard = (() => {
         return false;
     }
 
-    return {displayBoard, playRound, showWin, resetBoard, updateBoard, getBoard}
+    return {displayBoard, playRound, showWin, resetBoard, updateBoard, getBoard, removeWin}
 
 })();
 
@@ -152,6 +183,7 @@ const displayController = (() => {
         updateMarkerStyle(player_two_marker_o, player_two_color.value);
     }
 
+    //event listeners for player choices
     const player_event = (player_one_marker_x, player_one_color, player_one_marker_o, player_two_marker_o, player_two_color, player_two_marker_x  ) => {
         player_one_marker_x.addEventListener('click', () => {
             player1_mark = 'X';
@@ -180,13 +212,15 @@ const displayController = (() => {
             }
         });
     }
-      
+
+    //update marker style
     const updateMarkerStyle = (marker, color) => {
         marker.style.color = color;
         marker.style.backgroundColor = '#dddcdcbc';
         marker.style.border = `2px dashed ${color}`;
     }
 
+    //uncheck the other marker
     const uncheck = (marker) => {
         marker.style.backgroundColor = '';
         marker.style.border = 'none';
@@ -194,14 +228,15 @@ const displayController = (() => {
     }
 
     const input = () => {
-
+        //default values
         player_one_default();
         player_two_default();
 
+        //event listeners for player choices
         player_event(player_one_marker_x, player_one_color, player_one_marker_o, player_two_marker_o, player_two_color, player_two_marker_x);
         player_event(player_two_marker_x, player_two_color, player_two_marker_o, player_one_marker_o, player_one_color, player_one_marker_x);
     }
-
+    
     const displayWinner = (winner, result) => {
         const winnerDisplay = document.querySelector('.result');
         if (result === 'tie') {
@@ -219,7 +254,9 @@ const displayController = (() => {
 
 const gameController = (() => {
 
+    //Input
     displayController.input();
+    //Display Board
     Gameboard.displayBoard();
 
     //Default players
@@ -245,20 +282,21 @@ const gameController = (() => {
         player2.color = document.querySelector('.player-2-color').value;
         player1.mark = document.querySelector('.player-1-choice-x').style.backgroundColor !== '' ? 'X' : 'O';
         player2.mark = document.querySelector('.player-2-choice-x').style.backgroundColor !== '' ? 'X' : 'O';
-
-
     }
 
     //game Flow
     let currentPlayer = player1;
     let result = null;
     let gameOver = false;
-  
+    
+    // Event Listener for each square
     const squares = document.querySelectorAll('.square');
     squares.forEach((square) => {
       square.addEventListener('click', (e) => {
+        // Play round if game not over
         if (!gameOver) {
           result = Gameboard.playRound(currentPlayer, e.target.id.slice(-1));
+          // If result is true, game is over
           if (result) {
             gameOver = true;
             displayController.displayWinner(currentPlayer, result);
@@ -268,23 +306,31 @@ const gameController = (() => {
             container.style.gridTemplateRows = 'repeat(3, min-content) 1fr min-content';
             const reset = document.querySelector('.reset-container');
             reset.style.display = 'flex';
+
+            //Reset Game
             reset.onclick = () => {
+                // reset the board
                 Gameboard.resetBoard();
                 console.log(Gameboard.getBoard());
                 Gameboard.updateBoard(player1, player2);
+                Gameboard.removeWin();
 
+                // reset the result display
                 const winnerDisplay = document.querySelector('.result');
                 winnerDisplay.textContent = '';
                 winnerDisplay.style.color = 'black';
 
+                // make reset button disappear
                 const container = document.querySelector('.container');
                 container.style.gridTemplateRows = 'repeat(2, min-content) 1fr min-content';
                 const reset = document.querySelector('.reset-container');
                 reset.style.display = 'none';
-
+                
+                // Reset the game
                 gameOver = false;
             }
           }
+          // Else, switch players
           if (currentPlayer === player1) {
             currentPlayer = player2;
           } else {

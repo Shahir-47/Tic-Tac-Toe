@@ -155,11 +155,17 @@ const displayController = (() => {
             gameController.player1.mark = 'X';
             updateMarkerStyle(player_one_marker_x, player_one_color.value);
             uncheck(player_one_marker_o);
+
+            updateMarkerStyle(player_two_marker_o, player_two_color.value);
+            uncheck(player_two_marker_x);
         });
         player_one_marker_o.addEventListener('click', () => {
             gameController.player1.mark = 'O';
             updateMarkerStyle(player_one_marker_o, player_one_color.value);
             uncheck(player_one_marker_x);
+
+            updateMarkerStyle(player_two_marker_x, player_two_color.value);
+            uncheck(player_two_marker_o);
         });
         player_one_color.addEventListener('input', () => {
             if (player_one_marker_o.style.backgroundColor !== 'transparent'){
@@ -175,11 +181,17 @@ const displayController = (() => {
             gameController.player2.mark = 'X';
             updateMarkerStyle(player_two_marker_x, player_two_color.value);
             uncheck(player_two_marker_o);
+
+            updateMarkerStyle(player_one_marker_o, player_one_color.value);
+            uncheck(player_one_marker_x);
         });
         player_two_marker_o.addEventListener('click', () => {
             gameController.player2.mark = 'O';
             updateMarkerStyle(player_two_marker_o, player_two_color.value);
             uncheck(player_two_marker_x);
+
+            updateMarkerStyle(player_one_marker_x, player_one_color.value);
+            uncheck(player_one_marker_o);
         });
         player_two_color.addEventListener('input', () => {
             if (player_two_marker_o.style.backgroundColor !== 'transparent'){

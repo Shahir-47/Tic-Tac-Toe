@@ -47,7 +47,6 @@ body {
 }
 
 .load-up {
-    /* display: none; */
     display: grid;
     grid-template-rows: 3fr 1fr;
     grid-auto-columns: 100%;
@@ -69,11 +68,6 @@ body {
     font-size: 5rem;
     font-weight: 900;
 }
-
-/* .load-up .button-container .start {
-    max-height: 30%;
-    max-width: 20%;
-} */
 
 .start {
     display: inline-block;
@@ -155,10 +149,6 @@ body {
     height: 100%;
 }
 
-/* .player-choices .player-1 div~input {
-    padding: 0.5rem 0rem;
-} */
-
 .result {
     font-size: 1.5rem;
     font-weight: 700;
@@ -177,7 +167,6 @@ body {
     align-items: center;
     justify-content: center;
     gap: 1rem;
-    transition: background-color 0.3s ease;
 }
 
 .reset{
@@ -211,7 +200,7 @@ body {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    transition:  0.2s ease-in-out;
     border-bottom: 3px dashed #000000;
     border-right: 3px dashed #000000;
 }

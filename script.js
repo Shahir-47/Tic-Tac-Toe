@@ -503,7 +503,7 @@ const gameController = (() => {
           displayController.displayWinner(currentPlayer, result);
           handleGameEnd();
         } else {
-          switchTurns();
+            setTimeout(() => {switchTurns();}, 500);
         }
     };
 
@@ -525,7 +525,7 @@ const gameController = (() => {
                 squares.forEach((square) => {
                     square.onclick = null;
                 });
-                switchTurns();
+                setTimeout(() => {switchTurns();}, 500);
               }
             }
           };

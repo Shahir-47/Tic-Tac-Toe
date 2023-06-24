@@ -154,25 +154,185 @@ const Gameboard = (() => {
 
 })();
 
+const ai = (() => {
+
+    // see if any moves left for the ai to make
+    isMovesLeft = (board) => {
+        for(let i = 0; i < 3; i++)
+            for(let j = 0; j < 3; j++)
+                if (board[i][j] == '')
+                    return true;
+                    
+        return false;
+    }
+
+    // evaluate the board
+    evaluate = (board) => {
+        // check rows
+        for (let row = 0; row < 3; row++) {
+            if (board[row][0] == board[row][1] && board[row][1] == board[row][2]) {
+                if ((board[row][0] == gameController.player2.mark && gameController.player2.type === 'ai')
+                    || (board[row][0] == gameController.player1.mark && gameController.player1.type === 'ai')) {
+                    return +10;
+                } else if ((board[row][0] == gameController.player2.mark && gameController.player2.type === 'human')
+                || (board[row][0] == gameController.player1.mark && gameController.player1.type === 'human')) {
+                    return -10;
+                }
+            }
+        }
+
+        // check columns
+        for (let col = 0; col < 3; col++) {
+            if (board[0][col] == board[1][col] && board[1][col] == board[2][col]) {
+                if ((board[0][col] == gameController.player2.mark && gameController.player2.type === 'ai')
+                    || (board[0][col] == gameController.player1.mark && gameController.player1.type === 'ai')) {
+                    return +10;
+                } else if ((board[0][col] == gameController.player2.mark && gameController.player2.type === 'human')
+                || (board[0][col] == gameController.player1.mark && gameController.player1.type === 'human')) {
+                    return -10;
+                }
+            }
+        }
+
+        // check diagonals
+        if (board[0][0] == board[1][1] && board[1][1] == board[2][2]) {
+            if ((board[0][0] == gameController.player2.mark && gameController.player2.type === 'ai')
+                || (board[0][0] == gameController.player1.mark && gameController.player1.type === 'ai')) {
+                return +10;
+            } else if ((board[0][0] == gameController.player2.mark && gameController.player2.type === 'human')
+            || (board[0][0] == gameController.player1.mark && gameController.player1.type === 'human')) {
+                return -10;
+            }
+        }
+        if (board[0][2] == board[1][1] && board[1][1] == board[2][0]) {
+            if ((board[0][2] == gameController.player2.mark && gameController.player2.type === 'ai')
+                || (board[0][2] == gameController.player1.mark && gameController.player1.type === 'ai')) {
+                return +10;
+            } else if ((board[0][2] == gameController.player2.mark && gameController.player2.type === 'human')
+            || (board[0][2] == gameController.player1.mark && gameController.player1.type === 'human')) {
+                return -10;
+            }
+        }
+
+        // if no winner
+        return 0;
+    }
+
+    // minimax algorithm
+    minimax = (board, depth, isMax) => {
+        let score = evaluate(board);
+
+        // if ai wins
+        if (score == 10)
+            return score;
+
+        // if human wins
+        if (score == -10)
+            return score;
+
+        // if tie
+        if (isMovesLeft(board) == false)
+            return 0;
+
+        // if maximizer's move
+        if (isMax) {
+            let best = -1000;
+
+            // traverse all cells
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3;j++) {
+                    // check if cell is empty
+                    if (board[i][j] == '') {
+                        // make the move
+                        board[i][j] = gameController.player2.mark;
+
+                        // call minimax recursively and choose the maximum value
+                        best = Math.max(best, minimax(board, depth + 1, !isMax));
+
+                        // undo the move
+                        board[i][j] = '';
+                    }
+                }
+            }
+            return best;
+        }
+
+        // if minimizer's move
+        else {
+            let best = 1000;
+
+            // traverse all cells
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3;j++) {
+                    // check if cell is empty
+                    if (board[i][j] == '') {
+                        // make the move
+                        board[i][j] = gameController.player1.mark;
+
+                        // call minimax recursively and choose the minimum value
+                        best = Math.min(best, minimax(board, depth + 1, !isMax));
+
+                        // undo the move
+                        board[i][j] = '';
+                    }
+                }
+            }
+            return best;
+        }
+    }
+
+    // find the best move for the ai
+    findBestMove = (board) => {
+        let bestVal = -1000;
+        let bestMove = {row: -1, col: -1};
+
+        // traverse all cells
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3;j++) {
+                // check if cell is empty
+                if (board[i][j] == '') {
+                    
+                    // make the move
+                    if (gameController.player2.type === 'ai') board[i][j] = gameController.player2.mark;
+                    else if (gameController.player1.type === 'ai') board[i][j] = gameController.player1.mark;
+
+                    // compute evaluation function for this move
+                    let moveVal = minimax(board, 0, false);
+
+                    // undo the move
+                    board[i][j] = '';
+
+                    // if the value of the current move is more than the best value, then update best
+                    if (moveVal > bestVal) {
+                        bestMove.row = i;
+                        bestMove.col = j;
+                        bestVal = moveVal;
+                    }
+                }
+            }
+        }
+        return bestMove;
+    }
+    return {findBestMove}
+})();
+
 const player = (name, mark, color, type) => {
     return {name, mark, color, type}
 }
 
 const displayController = (() => {
-    let player1_mark = 'X';
-    let player2_mark = 'O';
-
+    //player choices selectors
     const player_one_marker_x = document.querySelector('.player-1-choice-x');
     const player_one_marker_o = document.querySelector('.player-1-choice-o');
 
     const player_two_marker_x = document.querySelector('.player-2-choice-x');
     const player_two_marker_o = document.querySelector('.player-2-choice-o');
 
+    //player color selectors
     let player_one_color = document.querySelector('.player-1-color');
     let player_two_color = document.querySelector('.player-2-color');
 
-    // Gameboard.displayBoard();
-
+    //default player choices
     const player_one_default = () => {
         player_one_color.value = '#eb3434';
         updateMarkerStyle(player_one_marker_x, player_one_color.value);
@@ -186,20 +346,16 @@ const displayController = (() => {
     //event listeners for player choices
     const player_event = (player_one_marker_x, player_one_color, player_one_marker_o, player_two_marker_o, player_two_color, player_two_marker_x  ) => {
         player_one_marker_x.addEventListener('click', () => {
-            player1_mark = 'X';
             updateMarkerStyle(player_one_marker_x, player_one_color.value);
             uncheck(player_one_marker_o);
 
-            player2_mark = 'O';
             updateMarkerStyle(player_two_marker_o, player_two_color.value);
             uncheck(player_two_marker_x);
         });
         player_one_marker_o.addEventListener('click', () => {
-            player1_mark = 'O';
             updateMarkerStyle(player_one_marker_o, player_one_color.value);
             uncheck(player_one_marker_x);
 
-            player2_mark = 'X';
             updateMarkerStyle(player_two_marker_x, player_two_color.value);
             uncheck(player_two_marker_o);
         });
@@ -247,7 +403,7 @@ const displayController = (() => {
             Gameboard.showWin();
         }
     }
-    return {displayWinner, input, player1_mark, player2_mark}
+    return {displayWinner, input}
 })();
 
 
@@ -284,6 +440,7 @@ const gameController = (() => {
         player1.type = 'ai';
         player2.type = 'human';
 
+         // see if the first player is human or ai
         if (player1.type === 'ai'){
             aiMove();
         } else if (player1.type === 'human'){
@@ -305,7 +462,7 @@ const gameController = (() => {
         } else {
           currentPlayer = player1;
         }
-        
+        // If game isn't over, continue playing
         if (!gameOver) {
             if (currentPlayer.type === 'ai') {
               aiMove();
@@ -315,13 +472,13 @@ const gameController = (() => {
         }
     };
 
+    // if player is ai
     const aiMove = () => {
-        const squares = document.querySelectorAll('.square');
-        let square;
-        do {
-          square = Math.floor(Math.random() * 9);
-        } while (squares[square].textContent !== '');
-        result = Gameboard.playRound(currentPlayer, square);
+        // Find the best move by using minimax algorithm
+        let bestMove = ai.findBestMove(Gameboard.getBoard());
+        const square = document.getElementById(`square${bestMove.row * 3 + bestMove.col}`);
+        result = Gameboard.playRound(currentPlayer, square.id.slice(-1));
+        // if result true, game over
         if (result) {
           gameOver = true;
           displayController.displayWinner(currentPlayer, result);
@@ -331,18 +488,21 @@ const gameController = (() => {
         }
     };
 
+    // if player is human
     const humanMove = () => {
         const squares = document.querySelectorAll('.square');
         squares.forEach((square) => {
           square.onclick = (e) => {
             // Play round if game not over
-            if (!gameOver) {
+            if (!gameOver && e.target.textContent === '') {
               result = Gameboard.playRound(currentPlayer, e.target.id.slice(-1));
+              // if result true, game over
               if (result) {
                 gameOver = true;
                 displayController.displayWinner(currentPlayer, result);
                 handleGameEnd();
               } else {
+                // if result false, keep playing
                 squares.forEach((square) => {
                     square.onclick = null;
                 });
@@ -381,6 +541,7 @@ const gameController = (() => {
           // Reset the game
           gameOver = false;
 
+          // alternate the starting player
           currentPlayer = playerAlternator === player1 ? player2 : player1;
           playerAlternator = currentPlayer;
     

@@ -390,6 +390,23 @@ const displayController = (() => {
         //event listeners for player choices
         player_event(player_one_marker_x, player_one_color, player_one_marker_o, player_two_marker_o, player_two_color, player_two_marker_x);
         player_event(player_two_marker_x, player_two_color, player_two_marker_o, player_one_marker_o, player_one_color, player_one_marker_x);
+
+        //event listeners for player type
+        player_one_human = document.querySelector('#player-1-human');
+        player_one_ai = document.querySelector('#player-1-ai');
+        player_two_human = document.querySelector('#player-2-human');
+        player_two_ai = document.querySelector('#player-2-ai');
+
+        //Prevent AI vs AI
+        player_one_ai.addEventListener('click', () => {
+            player_two_human.checked = true;
+            player_two_ai.checked = false;
+        });
+
+        player_two_ai.addEventListener('click', () => {
+            player_one_human.checked = true;
+            player_one_ai.checked = false;
+        });
     }
     
     const displayWinner = (winner, result) => {
@@ -437,8 +454,10 @@ const gameController = (() => {
         player2.color = document.querySelector('.player-2-color').value;
         player1.mark = document.querySelector('.player-1-choice-x').style.backgroundColor !== '' ? 'X' : 'O';
         player2.mark = document.querySelector('.player-2-choice-x').style.backgroundColor !== '' ? 'X' : 'O';
-        player1.type = 'ai';
-        player2.type = 'human';
+        player1.type = document.querySelector('#player-1-human').checked ? 'human' : 'ai';
+        player2.type = document.querySelector('#player-2-human').checked ? 'human' : 'ai';
+        console.log(player1.type);
+        console.log(player2.type);
 
          // see if the first player is human or ai
         if (player1.type === 'ai'){

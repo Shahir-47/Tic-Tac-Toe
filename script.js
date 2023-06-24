@@ -1,7 +1,6 @@
 const Gameboard = (() => {
     let boardArray = [['','',''], ['', '', ''], ['','','']]
     const getBoard = () => boardArray;
-    const setBoard = (newBoard) => boardArray = newBoard;
     const resetBoard = () => boardArray = [['','',''], ['','',''], ['','','']];
     
     // Display the board
@@ -14,7 +13,7 @@ const Gameboard = (() => {
             const square = document.createElement('div');
             square.classList.add('square');
             square.setAttribute('id', `square${i}`);
-            square.textContent = Gameboard.getBoard()[Math.floor(i/3)][i%3];
+            square.textContent = getBoard()[Math.floor(i/3)][i%3];
             board.appendChild(square);
         }
     }
@@ -23,7 +22,7 @@ const Gameboard = (() => {
     const updateBoard = (player1, player2) => {
         const squares = document.querySelectorAll('.square');
         squares.forEach((square, i) => {            
-            square.textContent = Gameboard.getBoard()[Math.floor(i/3)][i%3];
+            square.textContent = getBoard()[Math.floor(i/3)][i%3];
             if (square.textContent === player1.mark) {
                 square.style.color = player1.color;
             }

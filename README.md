@@ -33,6 +33,11 @@ The game relies on the following files and resources:
 The Tic Tac Toe game is compatible with modern web browsers that support HTML5, CSS3, and ECMAScript 6 (ES6) features.
 
 ## Credits
-Game developed by [Shahir Ahmed](https://github.com/shahir-47)
-Source code available on [GitHub](https://github.com/shahir-47/Tic-Tac-Toe)
+- Game developed by [Shahir Ahmed](https://github.com/shahir-47)
+- Source code available on [GitHub](https://github.com/shahir-47/Tic-Tac-Toe)
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contact
 For any issues or further information, please refer to the source code repository or contact me at [ahmeds@dickinson.edu].

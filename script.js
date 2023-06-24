@@ -281,10 +281,14 @@ const gameController = (() => {
         player2.color = document.querySelector('.player-2-color').value;
         player1.mark = document.querySelector('.player-1-choice-x').style.backgroundColor !== '' ? 'X' : 'O';
         player2.mark = document.querySelector('.player-2-choice-x').style.backgroundColor !== '' ? 'X' : 'O';
-        player1.type = 'human';
-        player2.type = 'ai';
+        player1.type = 'ai';
+        player2.type = 'human';
 
-        humanMove();
+        if (player1.type === 'ai'){
+            aiMove();
+        } else if (player1.type === 'human'){
+            humanMove();
+        }
 
     }
 
@@ -292,6 +296,7 @@ const gameController = (() => {
     let currentPlayer = player1;
     let result = null;
     let gameOver = false;
+    let playerAlternator = player1;
 
     const switchTurns = () => {
         // Switch players
@@ -338,6 +343,9 @@ const gameController = (() => {
                 displayController.displayWinner(currentPlayer, result);
                 handleGameEnd();
               } else {
+                squares.forEach((square) => {
+                    square.onclick = null;
+                });
                 switchTurns();
               }
             }
@@ -372,9 +380,16 @@ const gameController = (() => {
     
           // Reset the game
           gameOver = false;
+
+          currentPlayer = playerAlternator === player1 ? player2 : player1;
+          playerAlternator = currentPlayer;
     
           // Start the game by allowing the first player to make a move
-          humanMove();
+          if (currentPlayer.type === 'ai') {
+            aiMove();
+          } else if (currentPlayer.type === 'human') {
+            humanMove();
+          }
         };
       };
     return {player1, player2}
